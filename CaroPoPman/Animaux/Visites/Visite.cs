@@ -13,15 +13,15 @@ namespace CaroPoPman.Animaux
 		}
 
 		public DateTime DateVisite { 
-			get { return _row ["DateVisite"]; }
+			get { return (DateTime) _row ["DateVisite"]; }
 		}
 
 		public string Description { 
-			get { return _row["Description"] }
+			get { return _row ["Description"].ToString(); }
 		}
 
 		public string Commentaire {
-			get { return _row ["Commentaire"]; }
+			get { return _row ["Commentaire"].ToString(); }
 		}
 
 	}

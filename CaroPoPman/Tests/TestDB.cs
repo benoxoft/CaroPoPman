@@ -16,7 +16,6 @@ namespace TestCaroPoPman
 		public void TestExecuteNonQuery() {
 			Console.WriteLine("HELLO!");
 			var ret = DB.Instance.ExecuteNonQuery("INSERT INTO Clients (Nom, Prenom, TelephoneMaison, TelephoneCellulaire, AutreTelephone) VALUES ('Pawq', 'Benn', '555-555-5555', '', '')");
-			Console.WriteLine(ret);
 			DB.Instance.ExecuteNonQuery(string.Format("DELETE FROM Clients WHERE IDClient={0}", ret));
 		}
 

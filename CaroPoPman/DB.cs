@@ -10,12 +10,16 @@ namespace CaroPoPman
 
 		private static DB _db = new DB ();
 
-		private SqliteConnection _conn = new SqliteConnection(CONNECTION_STRING);
+		//private SqliteConnection _conn = new SqliteConnection(CONNECTION_STRING);
 
 		private DB () {}
 
-		public SqliteConnection CreateConnection() {
-			return _conn;
+		public SqliteConnection Connection() {
+			return new SqliteConnection(CONNECTION_STRING);
+		}
+
+		public IDbCommand CreateCommand(string sql) {
+			return CreateCommand(Connection(), sql);
 		}
 
 		public IDbCommand CreateCommand(IDbConnection conn, string sql) {
@@ -25,22 +29,28 @@ namespace CaroPoPman
 			return cmd;
 		}
 
+		public IDbDataAdapter CreateDataAdapter() {
+			var a = new SqliteDataAdapter();
+			return a;
+
+		}
+
 		public SqliteDataAdapter CreateDataAdapter(IDbCommand cmd) {
 			return new SqliteDataAdapter((SqliteCommand)cmd);
 		}
 
 		public DataTable GetDataTable(string sql) {
-			using (IDbConnection conn = CreateConnection()) {
+			using (IDbConnection conn = Connection()) {
 				var cmd = CreateCommand (conn, sql);
-				var table = new DataTable ();
+				var ds = new DataSet();
 				var adapter = CreateDataAdapter (cmd);
-				adapter.Fill (table);
-				return table;
+				adapter.Fill (ds);
+				return ds.Tables[0];
 			}
 		}
 
 		public long ExecuteNonQuery(string sql) {
-			using (IDbConnection conn = CreateConnection()) {
+			using (IDbConnection conn = Connection()) {
 				conn.Open();
 				var cmd = CreateCommand(conn, sql);
 				cmd.ExecuteNonQuery();
@@ -49,12 +59,16 @@ namespace CaroPoPman
 		}
 
 		public object ExecuteScalar(string sql) {
-			using (IDbConnection conn = CreateConnection()) {
+			using (IDbConnection conn = Connection()) {
 				var cmd = CreateCommand(conn, sql);
 				conn.Open();
 				var data = cmd.ExecuteScalar();
 				return data;
 			}
+		}
+
+		public long GetLastInsertedID() {
+			return GetLastInsertedID(Connection());
 		}
 
 		public long GetLastInsertedID(IDbConnection conn) {

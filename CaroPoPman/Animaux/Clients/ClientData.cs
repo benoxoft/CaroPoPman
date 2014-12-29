@@ -6,6 +6,8 @@ namespace CaroPoPman.Animaux.Clients {
 
 	public class ClientData {
 
+		#region SQL Queries
+
 		private const string SELECT_CLIENT = "SELECT * FROM Clients WHERE IDClient = {0}";
 
 		private const string UPDATE_CLIENT = 
@@ -23,13 +25,18 @@ namespace CaroPoPman.Animaux.Clients {
 
 		private const string DELETE_CLIENT = "DELETE FROM Clients WHERE IDClient = {0}";
 
+		#endregion
+
 		private static readonly ClientData _instance = new ClientData();
 
-		private readonly IDbDataAdapter _adapter;
-		private IDbConnection _insertConn;
+		//private IDbDataAdapter _adapter;
+		//private IDbConnection _insertConn;
+		//private IDbConnection _updateConn;
 
 		private ClientData () {
-			_adapter = CreateDataAdapter();
+			//_adapter = CreateDataAdapter();
+			//_insertConn = _adapter.InsertCommand.Connection;
+			//_updateConn = _adapter.UpdateCommand.Connection;
 		}
 
 		public DataTable ObtenirClient(long idClient) {
@@ -52,16 +59,20 @@ namespace CaroPoPman.Animaux.Clients {
 		}
 
 		public void UpdateClientTable(DataTable table) {
-			if (table.Rows[0]["IDClient"] == DBNull.Value) {
-				_insertConn.Open();
-			}
+			var adapter = CreateDataAdapter();
+			adapter.InsertCommand.Connection.Open();
 
-			_adapter.Update(table.DataSet);
+			adapter.Update(table.DataSet);
 
 			if (table.Rows[0]["IDClient"] == DBNull.Value) {
-				var lastrowid = DB.Instance.GetLastInsertedID(_insertConn);
+				var lastrowid = DB.Instance.GetLastInsertedID(adapter.InsertCommand.Connection);
 				table.Rows[0]["IDClient"] = lastrowid;
 			}
+			adapter.InsertCommand.Connection.Close();
+			adapter.InsertCommand.Connection.Dispose();
+			adapter.InsertCommand.Dispose();
+			adapter.UpdateCommand.Dispose();
+
 		}
 
 		public void DeleteClient(DataTable table) {
@@ -69,16 +80,17 @@ namespace CaroPoPman.Animaux.Clients {
 			DB.Instance.ExecuteNonQuery(sql);
 		}
 
+		#region ADO.net objects
+
 		private IDbDataAdapter CreateDataAdapter() {
-			var a = DB.Instance.CreateDataAdapter();
-			a.UpdateCommand = CreateUpdateCommand();
-			a.InsertCommand = CreateInsertCommand();
-			return a;
+			var adapter = DB.Instance.CreateDataAdapter();
+			adapter.UpdateCommand = CreateUpdateCommand();
+			adapter.InsertCommand = CreateInsertCommand();
+			return adapter;
 		}
 
 		private IDbCommand CreateInsertCommand() {
 			var cmd = DB.Instance.CreateCommand(INSERT_CLIENT);
-			_insertConn = cmd.Connection;
 			cmd.Parameters.Add(CreateNomParam(cmd));
 			cmd.Parameters.Add(CreatePrenomParam(cmd));
 			cmd.Parameters.Add(CreateTelephoneMaisonParam(cmd));
@@ -145,6 +157,8 @@ namespace CaroPoPman.Animaux.Clients {
 			paramAutreTelephone.SourceColumn = "AutreTelephone";
 			return paramAutreTelephone;
 		}
+
+		#endregion
 
 		public static ClientData Instance {
 			get { return _instance;	}

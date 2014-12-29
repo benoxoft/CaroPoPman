@@ -15,6 +15,7 @@ namespace CaroPoPman
 		private DB () {}
 
 		public SqliteConnection Connection() {
+			//return _conn;
 			return new SqliteConnection(CONNECTION_STRING);
 		}
 
@@ -45,6 +46,7 @@ namespace CaroPoPman
 				var ds = new DataSet();
 				var adapter = CreateDataAdapter (cmd);
 				adapter.Fill (ds);
+				cmd.Dispose();
 				return ds.Tables[0];
 			}
 		}
@@ -54,6 +56,7 @@ namespace CaroPoPman
 				conn.Open();
 				var cmd = CreateCommand(conn, sql);
 				cmd.ExecuteNonQuery();
+				cmd.Dispose();
 				return GetLastInsertedID(conn);
 			}
 		}
@@ -63,6 +66,7 @@ namespace CaroPoPman
 				var cmd = CreateCommand(conn, sql);
 				conn.Open();
 				var data = cmd.ExecuteScalar();
+				cmd.Dispose();
 				return data;
 			}
 		}
@@ -74,7 +78,9 @@ namespace CaroPoPman
 		public long GetLastInsertedID(IDbConnection conn) {
 			string sql = "SELECT last_insert_rowid()";
 			var cmd = CreateCommand(conn, sql);
-			return (long)cmd.ExecuteScalar();
+			var data = (long)cmd.ExecuteScalar();
+			cmd.Dispose();
+			return data;
 		}
 
 		public static DB Instance {

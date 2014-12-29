@@ -69,6 +69,54 @@ namespace CaroPoPman.Tests
 			Assert.AreEqual(row["AutreTelephone"], "");
 		}
 
+		[Test()]
+		public void TestManyOperations() {
+			Console.WriteLine("Create client 1");
+			var x1 = ClientData.Instance.ObtenirClient(-1);
+			x1.Rows[0]["Nom"] = "Test1";
+			ClientData.Instance.UpdateClientTable(x1);
+
+			Console.WriteLine("Create client 2");
+			var x2 = ClientData.Instance.ObtenirClient(-1);
+			x2.Rows[0]["Nom"] = "Test2";
+			ClientData.Instance.UpdateClientTable(x2);
+
+			Console.WriteLine("Create client 3");
+			var x3 = ClientData.Instance.ObtenirClient(-1);
+			x3.Rows[0]["Nom"] = "Test3";
+			ClientData.Instance.UpdateClientTable(x3);
+
+			Console.WriteLine("Update client 1");
+			x1.Rows[0]["Prenom"] = "Update1";
+			ClientData.Instance.UpdateClientTable(x1);
+			Console.WriteLine("Update client 2");
+			x2.Rows[0]["Prenom"] = "Update2";
+			ClientData.Instance.UpdateClientTable(x2);
+			Console.WriteLine("Update client 2");
+			x3.Rows[0]["Prenom"] = "Update3";
+			ClientData.Instance.UpdateClientTable(x3);
+
+			Console.WriteLine("Delete client 1");
+			ClientData.Instance.DeleteClient(x1);
+			Console.WriteLine("Delete client 2");
+			ClientData.Instance.DeleteClient(x2);
+			Console.WriteLine("Delete client 3");
+			ClientData.Instance.DeleteClient(x3);
+		}
+
+
+		public void TestLotsOfOperations() {
+			var x1 = ClientData.Instance.ObtenirClient(-1);
+			x1.Rows[0]["Nom"] = "Test1";
+			ClientData.Instance.UpdateClientTable(x1);
+
+			for (int i = 0; i < 30000; i++) {
+				x1.Rows[0]["Prenom"] = "Update1" + i.ToString();
+				ClientData.Instance.UpdateClientTable(x1);
+				//ClientData.Instance.DeleteClient(x1);
+				//Console.WriteLine(i);
+			}
+		}
     }
 }
 

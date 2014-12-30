@@ -10,8 +10,8 @@ namespace CaroPoPman.Animaux
 		private const string SELECT_CLIENT_ID = "SELECT IDClient FROM Animaux WHERE IDAnimal = {0}";
 
 		private const string INSERT_ANIMAL = 
-			"INSERT INTO Animaux (IDAnimal, Nom, PrixBainSeul, PrixToilettage, Notes, IDClient, IDRace)" +
-			"VALUES (@IDAnimal, @Nom, @PrixBainSeul, @PrixToilettage, @Notes, @IDClient, @IDRace)";
+			"INSERT INTO Animaux (Nom, PrixBainSeul, PrixToilettage, Notes, IDClient, IDRace)" +
+			"VALUES (@Nom, @PrixBainSeul, @PrixToilettage, @Notes, @IDClient, @IDRace)";
 
 		private const string UPDATE_ANIMAL = 
 			"UPDATE Animaux SET" +
@@ -33,16 +33,52 @@ namespace CaroPoPman.Animaux
 			return idClient;
 		}
 
-		public DataTable ObtenirAnimal(int animalID) {
+		public DataTable ObtenirAnimal(long animalID) {
 			string sql = string.Format(SELECT_ANIMAL, animalID.ToString());
 			var table = DB.Instance.GetDataTable(sql);
+			if (table.Rows.Count == 0) {
+				table.Rows.Add(CreateDefaultRow(table));
+			}
 			return table;
+		}
+
+		private DataRow CreateDefaultRow(DataTable table) {
+			var row = table.NewRow();
+			row["Nom"] = "";
+			row["PrixBainSeul"] = 0;
+			row["PrixToilettage"] = 0;
+			row["Notes"] = "";
+			row["IDClient"] = -1;
+			row["IDRace"] = -1;
+			return row;
 		}
 
 		public void UpdateAnimal(DataTable table) {
 			var adapter = CreateDataAdapter();
+			adapter.InsertCommand.Connection.Open();
+
 			adapter.Update(table.DataSet);
+
+			if (table.Rows[0]["IDAnimal"] == DBNull.Value) {
+				var lastrowid = DB.Instance.GetLastInsertedID(adapter.InsertCommand.Connection);
+				table.Rows[0]["IDAnimal"] = lastrowid;
+			}
+			adapter.InsertCommand.Connection.Close();
+			adapter.InsertCommand.Connection.Dispose();
 		}
+
+		public void DeleteAnimal(DataTable table) {
+			var idAnimal = table.Rows[0]["IDAnimal"];
+			if (idAnimal != DBNull.Value) {
+				string sql = string.Format(DELETE_ANIMAL, idAnimal.ToString());
+				DB.Instance.ExecuteNonQuery(sql);
+			}
+			table.Rows[0].Delete();
+			table.Rows.Add(CreateDefaultRow(table));
+			table.AcceptChanges();
+		}
+
+		#region ADO.net objects
 
 		private IDbDataAdapter CreateDataAdapter() {
 			var adapter = DB.Instance.CreateDataAdapter();
@@ -53,7 +89,6 @@ namespace CaroPoPman.Animaux
 
 		private IDbCommand CreateInsertCommand() {
 			var cmd = DB.Instance.CreateCommand(INSERT_ANIMAL);
-			cmd.Parameters.Add(CreateIDAnimalParam(cmd));
 			cmd.Parameters.Add(CreateNomParam(cmd));
 			cmd.Parameters.Add(CreatePrixBainSeul(cmd));
 			cmd.Parameters.Add(CreatePrixToilettage(cmd));
@@ -70,8 +105,8 @@ namespace CaroPoPman.Animaux
 			cmd.Parameters.Add(CreatePrixBainSeul(cmd));
 			cmd.Parameters.Add(CreatePrixToilettage(cmd));
 			cmd.Parameters.Add(CreateNotesParam(cmd));
-			cmd.Parameters.Add(CreateIDClientParam(cmd));
-			cmd.Parameters.Add(CreateIDRaceParam(cmd));
+			//cmd.Parameters.Add(CreateIDClientParam(cmd));
+			//cmd.Parameters.Add(CreateIDRaceParam(cmd));
 			return cmd;
 		}
 
@@ -130,6 +165,8 @@ namespace CaroPoPman.Animaux
 			param.ParameterName = "@IDRace";
 			return param;
 		}
+
+		#endregion
 
 		public static AnimalData Instance {
 			get { return _instance; }

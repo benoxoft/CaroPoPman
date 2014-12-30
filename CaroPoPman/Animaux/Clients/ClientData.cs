@@ -68,8 +68,15 @@ namespace CaroPoPman.Animaux.Clients {
 		}
 
 		public void DeleteClient(DataTable table) {
-			string sql = string.Format(DELETE_CLIENT, table.Rows[0]["IDClient"].ToString());
-			DB.Instance.ExecuteNonQuery(sql);
+			var idClient = table.Rows[0]["IDClient"];
+			if (idClient != DBNull.Value) {
+				string sql = string.Format(DELETE_CLIENT, table.Rows[0]["IDClient"].ToString());
+				DB.Instance.ExecuteNonQuery(sql);
+			}
+			table.Rows[0].Delete();
+			table.Rows.Add(CreateDefaultRow(table));
+			table.AcceptChanges();
+
 		}
 
 		#region ADO.net objects

@@ -29,15 +29,7 @@ namespace CaroPoPman.Animaux.Clients {
 
 		private static readonly ClientData _instance = new ClientData();
 
-		//private IDbDataAdapter _adapter;
-		//private IDbConnection _insertConn;
-		//private IDbConnection _updateConn;
-
-		private ClientData () {
-			//_adapter = CreateDataAdapter();
-			//_insertConn = _adapter.InsertCommand.Connection;
-			//_updateConn = _adapter.UpdateCommand.Connection;
-		}
+		private ClientData () {}
 
 		public DataTable ObtenirClient(long idClient) {
 			string sql = string.Format (SELECT_CLIENT, idClient.ToString ());

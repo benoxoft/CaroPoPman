@@ -6,6 +6,7 @@ namespace CaroPoPman.Animaux
 	{
 		private readonly string _description;
 		private bool _enabled;
+		private bool _visible;
 
 		public Particularite (string description, bool enabled)
 		{
@@ -20,6 +21,11 @@ namespace CaroPoPman.Animaux
 		public bool Enabled {
 			get { return _enabled; }
 			set { _enabled = value; }
+		}
+
+		public bool Visible {
+			get { return _visible; }
+			set { _visible = value; }
 		}
 	}
 }

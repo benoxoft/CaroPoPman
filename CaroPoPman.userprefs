@@ -1,23 +1,20 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="CaroPoPman/DB.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="CaroPoPman/Animaux/Particularites/ParticulariteData.cs">
     <Files>
-      <File FileName="CaroPoPman/Program.cs" Line="2" Column="2" />
-      <File FileName="CaroPoPman/MainWindow.cs" Line="1" Column="1" />
-      <File FileName="CaroPoPman/Animaux/Animal.cs" Line="19" Column="19" />
-      <File FileName="CaroPoPman/Animaux/GestionAnimaux.cs" Line="16" Column="16" />
-      <File FileName="CaroPoPman/DB.cs" Line="3" Column="3" />
-      <File FileName="CaroPoPman/Animaux/Clients/ClientData.cs" Line="1" Column="1" />
-      <File FileName="CaroPoPman/Animaux/Visites/Visite.cs" Line="48" Column="48" />
-      <File FileName="CaroPoPman/Animaux/Clients/Client.cs" Line="44" Column="44" />
-      <File FileName="CaroPoPman/Animaux/AnimalData.cs" Line="3" Column="3" />
-      <File FileName="CaroPoPman/Animaux/Visites/VisiteData.cs" Line="28" Column="28" />
+      <File FileName="CaroPoPman/Tests/TestClientData.cs" Line="3" Column="3" />
+      <File FileName="CaroPoPman/Animaux/Clients/ClientData.cs" Line="26" Column="26" />
+      <File FileName="CaroPoPman/DB.cs" Line="5" Column="5" />
+      <File FileName="CaroPoPman/Program.cs" Line="1" Column="1" />
+      <File FileName="CaroPoPman/Animaux/Clients/Client.cs" Line="1" Column="1" />
+      <File FileName="CaroPoPman/Animaux/Particularites/Particularite.cs" Line="28" Column="28" />
       <File FileName="CaroPoPman/Animaux/Particularites/ParticulariteData.cs" Line="4" Column="4" />
-      <File FileName="CaroPoPman/Tests/TestDB.cs" Line="8" Column="8" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore />
+    <BreakpointStore>
+      <Breakpoint file="/Users/bpaquet/Projects/CaroPoPman/CaroPoPman/Program.cs" line="18" column="1" />
+    </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
 </Properties>

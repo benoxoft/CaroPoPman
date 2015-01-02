@@ -86,6 +86,7 @@
     <Folder Include="Animaux\Particularites\" />
     <Folder Include="Animaux\Visites\" />
     <Folder Include="Tests\" />
+    <Folder Include="Animaux\Races\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

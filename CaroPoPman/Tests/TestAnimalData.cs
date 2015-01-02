@@ -36,8 +36,8 @@ namespace CaroPoPman.Tests
 			Assert.AreEqual(row["IDAnimal"], idAnimal);
 
 			AnimalData.Instance.DeleteAnimal(x);
-
 			x = AnimalData.Instance.ObtenirAnimal(idAnimal);
+			row = x.Rows[0];
 			Assert.AreEqual(row["Nom"], "");
 		}
 

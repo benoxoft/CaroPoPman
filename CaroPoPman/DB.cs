@@ -35,7 +35,7 @@ namespace CaroPoPman
 			return a;
 
 		}
-
+			
 		public SqliteDataAdapter CreateDataAdapter(IDbCommand cmd) {
 			return new SqliteDataAdapter((SqliteCommand)cmd);
 		}

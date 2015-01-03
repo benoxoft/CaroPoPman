@@ -16,7 +16,7 @@ namespace CaroPoPman
 		}
 
 		public static void Testt() {
-			var t = new TestParticulariteData();
+			var t = new TestVisiteData();
 			t.TestCRUD();
 		}
 	}
